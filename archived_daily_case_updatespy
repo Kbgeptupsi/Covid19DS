@@ -1,0 +1,30 @@
+#Importamos librerias 
+
+import sqlite3
+import csv
+
+#conexion a la base de datos 
+conexion = sqlite3.connect("/home/devkbgeptupsi/Documentos/DataScience/Covid-19DS/Covid-19 datasets/2020covid-19.db")
+#metodo cursor
+cursor = conexion.cursor()
+
+
+#Creamos la tabla 
+cursor.execute("CREATE TABLE archived_daily_case_updates (Province_State VARCHAR(30),Country_Region VARCHAR(30),LastUpdate VARCHAR(16), Confirmed INTEGER, Death INTEGER, Recovered INTEGER,Suspected INTEGER)")
+
+
+#abrimos el archivo
+datasetscsv = open("/home/devkbgeptupsi/Documentos/DataScience/Covid-19DS/Covid-19 datasets/COVID-19-master/archived_data/archived_daily_case_updates/01-21-2020_2200.csv")
+
+
+
+row = csv.reader(datasetscsv)
+
+cursor.executemany("INSERT INTO  archived_daily_case_updates VALUES (?,?,?,?,?,?,?)", row)
+
+cursor.execute("SELECT * FROM archived_daily_case_updates")
+
+print(cursor.fetchall())
+
+conexion.commit()
+conexion.close()
